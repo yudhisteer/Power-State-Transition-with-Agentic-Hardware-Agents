@@ -48,7 +48,7 @@ def interpret_command(user_input):
 def send_to_pi(angle):
     """Send the angle to the Raspberry Pi's API."""
     try:
-        response = requests.post(PI_API_URL, json={"angle": angle})
+        response = requests.post(PI_API_URL, params={"angle": angle})
         if response.status_code == 200:
             logger.info(f"Pi responded: {response.json()['status']}")
         else:
