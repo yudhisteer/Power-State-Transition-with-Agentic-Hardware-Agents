@@ -23,7 +23,7 @@ logger.addHandler(handler)
 
 
 # Replace with Pi’s IP (same network) or Ngrok URL (different networks)
-PI_API_URL = "http://<pi-ip-or-ngrok-url>:5000/rotate/"
+PI_API_URL = "http://192.168.189.217:8000/rotate/"
 
 # OpenAI API configuration
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
