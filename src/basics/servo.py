@@ -1,5 +1,6 @@
-from machine import Pin, PWM
 import time
+
+from machine import PWM, Pin
 
 # Configure PWM pin (adjust pin number based on your board)
 SERVO_PIN = 0  # GP0 on Pico, GPIO13 on ESP32, etc.

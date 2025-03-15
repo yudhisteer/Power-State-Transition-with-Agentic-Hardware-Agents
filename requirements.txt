@@ -38,7 +38,7 @@ jsonpointer==2.1
 jupyter_client==8.6.3
 jupyter_core==5.7.2
 keyboard==0.13.5
-lgpio==0.2.2.0
+# lgpio==0.2.2.0
 matplotlib-inline==0.1.7
 mypy-extensions==1.0.0
 nest_asyncio==1.6.0
@@ -54,7 +54,7 @@ prompt_toolkit==3.0.50
 psutil==7.0.0
 ptyprocess==0.7.0
 pure_eval==0.2.3
-pycosat==0.6.6
+# pycosat==0.6.6
 pycparser==2.22
 pydantic==2.10.6
 pydantic_core==2.27.2
@@ -65,7 +65,7 @@ PySocks==1.7.1
 python-dateutil==2.9.0.post0
 pyzmq==26.3.0
 requests==2.32.3
-RPi.GPIO==0.7.1
+# RPi.GPIO==0.7.1
 ruamel.yaml==0.18.10
 ruamel.yaml.clib==0.2.12
 setuptools==75.1.0

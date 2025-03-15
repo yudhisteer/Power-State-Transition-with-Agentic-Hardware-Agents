@@ -1,5 +1,6 @@
-from machine import Pin
 from time import sleep
+
+from machine import Pin
 
 # Set up the onboard LED on GPIO 25
 led = Pin(25, Pin.OUT)

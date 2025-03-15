@@ -1,6 +1,7 @@
-from machine import Pin
-from time import sleep
 import sys
+from time import sleep
+
+from machine import Pin
 
 led = Pin(25, Pin.OUT)  # Adjust to your LED pin (e.g., 16 for external)
 

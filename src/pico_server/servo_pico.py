@@ -1,6 +1,7 @@
-from machine import Pin, PWM
-import time
 import sys
+import time
+
+from machine import PWM, Pin
 
 # Configure PWM pin for servo (GP0 on Pico)
 SERVO_PIN = 0

@@ -1,25 +1,13 @@
+import logging
+import os
+
 import requests
 from openai import OpenAI
-import os
-import logging
-import colorlog
 
-# Set up logging
-handler = colorlog.StreamHandler()
-handler.setFormatter(colorlog.ColoredFormatter(
-    '%(log_color)s%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    log_colors={
-        'DEBUG':    'cyan',
-        'INFO':     'green',
-        'WARNING':  'yellow',
-        'ERROR':    'red',
-        'CRITICAL': 'red,bg_white',
-    }
-))
+from util import logger_setup
 
+# Initialize logger
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-logger.addHandler(handler)
 
 
 # Replace with Pi’s IP (same network) or Ngrok URL (different networks)
@@ -32,7 +20,7 @@ def interpret_command(user_input):
     """Use OpenAI to interpret the user's command and extract the angle."""
     try:
         response = client.chat.completions.create(
-        model="gpt-3.5-turbo",  # Or "gpt-4" if you have access
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "You are a command interpreter for a servo motor. Extract the angle (0-180 degrees) from the user's request. Respond with 'rotate X' where X is the angle, or 'unknown' if the command is invalid."},
             {"role": "user", "content": user_input}

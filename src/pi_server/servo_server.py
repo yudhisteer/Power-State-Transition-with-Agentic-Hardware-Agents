@@ -1,38 +1,30 @@
-from fastapi import FastAPI, HTTPException
-from time import sleep
-import uvicorn
 import logging
-import colorlog
+from time import sleep
+
+import uvicorn
+from fastapi import FastAPI, HTTPException
 from gpiozero import AngularServo
 
-# Set up logging
-handler = colorlog.StreamHandler()
-handler.setFormatter(colorlog.ColoredFormatter(
-    '%(log_color)s%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    log_colors={
-        'DEBUG':    'cyan',
-        'INFO':     'green',
-        'WARNING':  'yellow',
-        'ERROR':    'red',
-        'CRITICAL': 'red,bg_white',
-    }
-))
+from util import logger_setup
 
+# Initialize logger
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-logger.addHandler(handler)
+
+
+# Initialize FastAPI app
 app = FastAPI()
 
 # Configure servo on GPIO 14 (your working setup)
 servo = AngularServo(14, min_angle=0, max_angle=180, min_pulse_width=0.5/1000, max_pulse_width=2.5/1000)
 
-def set_angle(angle):
+def set_angle(angle: int) -> None:
     """Set servo angle (0-180 degrees)"""
     servo.angle = angle
     sleep(1)  # Match your tested delay
 
 @app.post("/rotate/")
 async def rotate_servo(angle: int):
+    """Rotate servo to a given angle"""
     try:
         if 0 <= angle <= 180:
             logger.info(f"Rotating servo to {angle}°")
@@ -46,6 +38,7 @@ async def rotate_servo(angle: int):
 
 @app.on_event("shutdown")
 def cleanup():
+    """Cleanup function to close the servo"""
     servo.close()  # Properly close the servo object
     logger.info("Servo closed")
 

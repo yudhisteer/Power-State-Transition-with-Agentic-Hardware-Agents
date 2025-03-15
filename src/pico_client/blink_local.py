@@ -1,7 +1,9 @@
+import os
+from time import sleep
+
 import serial
 from openai import OpenAI
-from time import sleep
-import os
+
 pico_port = "COM9"
 ser = None
 
