@@ -1,7 +1,7 @@
 import glob
 import logging
 import time
-
+import supabase
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -55,11 +55,23 @@ class TemperatureResponse(BaseModel):
     celsius: float
     fahrenheit: float
 
+def store_temperature(temp_c: float, temp_f: float) -> None:
+    """Store the temperature data in Supabase."""
+    try:
+        data = {"celsius": temp_c, "fahrenheit": temp_f}
+        response = supabase.table("temperature_readings").insert(data).execute()
+        logger.info(f"Stored temperature in Supabase: {response.data}")
+    except Exception as e:
+        logger.error(f"Failed to store temperature in Supabase: {e}")
+
 @app.get("/temperature/", response_model=TemperatureResponse)
 async def get_temperature():
     """Endpoint to return the current temperature."""
     try:
+        # Read the temperature from the sensor
         temp_c, temp_f = read_temp()
+        # Store the temperature in Supabase
+        store_temperature(temp_c, temp_f)
         return TemperatureResponse(celsius=temp_c, fahrenheit=temp_f)
     except Exception as e:
         logger.error(f"Error reading temperature: {e}")
