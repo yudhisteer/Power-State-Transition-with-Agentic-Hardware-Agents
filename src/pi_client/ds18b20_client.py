@@ -9,7 +9,7 @@ from util import logger_setup
 logger = logging.getLogger(__name__)
 
 # Server URL (replace with your Raspberry Pi's IP if different)
-PI_API_URL = "http://192.168.189.217:8001/temperature/"
+PI_API_URL = "http://192.168.189.217:8000/temperature/"
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
