@@ -1,8 +1,10 @@
 import logging
 import os
+
 import requests
 from openai import OpenAI
 from pydantic import BaseModel, ValidationError
+
 from util import logger_setup
 
 # Initialize logger
@@ -40,7 +42,7 @@ def interpret_command(user_input: str) -> str:
 def fetch_temperature() -> None:
     """Fetch and display the temperature from the server."""
     try:
-        response = requests.get(PI_API_URL, timeout=5)  # Added timeout for robustness
+        response = requests.get(PI_API_URL, timeout=1)  # Added timeout for robustness
         if response.status_code == 200:
             try:
                 data = Temperature(**response.json())
