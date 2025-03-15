@@ -4,6 +4,7 @@ import time
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 
 from util import logger_setup
 
@@ -49,13 +50,17 @@ def read_temp():
         logger.error("Invalid temperature data")
         raise Exception("Invalid temperature data")
 
-@app.get("/temperature/")
+# Define Pydantic model for the temperature response
+class TemperatureResponse(BaseModel):
+    celsius: float
+    fahrenheit: float
+
+@app.get("/temperature/", response_model=TemperatureResponse)
 async def get_temperature():
     """Endpoint to return the current temperature."""
     try:
         temp_c, temp_f = read_temp()
-        logger.info(f"Temperature: {temp_c:.2f}°C / {temp_f:.2f}°F")
-        return {"celsius": temp_c, "fahrenheit": temp_f}
+        return TemperatureResponse(celsius=temp_c, fahrenheit=temp_f)
     except Exception as e:
         logger.error(f"Error reading temperature: {e}")
         raise HTTPException(status_code=500, detail=str(e))

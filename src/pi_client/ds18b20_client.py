@@ -2,7 +2,7 @@ import logging
 import os
 import requests
 from openai import OpenAI
-
+from pydantic import BaseModel, ValidationError
 from util import logger_setup
 
 # Initialize logger
@@ -13,6 +13,11 @@ PI_API_URL = "http://192.168.189.217:8000/temperature/"
 
 # Initialize OpenAI client
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# Define Pydantic model for temperature data
+class Temperature(BaseModel):
+    celsius: float
+    fahrenheit: float
 
 def interpret_command(user_input: str) -> str:
     """Use OpenAI to determine if the user is asking for the temperature."""
@@ -32,21 +37,27 @@ def interpret_command(user_input: str) -> str:
         logger.error(f"Error interpreting command: {e}")
         return "unknown"
 
-def fetch_temperature():
+def fetch_temperature() -> None:
     """Fetch and display the temperature from the server."""
     try:
-        response = requests.get(PI_API_URL)
+        response = requests.get(PI_API_URL, timeout=5)  # Added timeout for robustness
         if response.status_code == 200:
-            data = response.json()
-            temp_c = data["celsius"]
-            temp_f = data["fahrenheit"]
-            logger.info(f"Temperature: {temp_c}°C / {temp_f}°F")
+            try:
+                data = Temperature(**response.json())
+                temp_c = data.celsius
+                temp_f = data.fahrenheit
+                logger.info(f"Temperature: {temp_c}°C / {temp_f}°F")
+            except ValidationError as e:
+                logger.error(f"Invalid temperature data: {e}")
         else:
-            logger.error(f"Server error: {response.json()['detail']}")
+            error_detail = response.json().get('detail', 'Unknown error')
+            logger.error(f"Server error: {error_detail}")
     except requests.exceptions.RequestException as e:
         logger.error(f"Failed to connect to server: {e}")
 
+
 try:
+    print("Welcome! You can ask for the temperature or type 'quit' to exit.")
     while True:
         user_input = input("Ask something (e.g., 'what is the temperature'): ")
         if user_input.lower() == "quit":
@@ -59,4 +70,4 @@ try:
         else:
             logger.info("Command not recognized")
 except KeyboardInterrupt:
-    logger.info("\nExiting...")
+    logger.info("Exiting...")
