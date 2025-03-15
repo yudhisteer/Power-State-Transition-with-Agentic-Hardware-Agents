@@ -1,8 +1,9 @@
 import glob
-import time
 import logging
+import time
 
 from util import logger_setup
+
 logger = logging.getLogger(__name__)
 
 try:

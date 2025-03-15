@@ -16,7 +16,7 @@ PI_API_URL = "http://192.168.189.217:8000/rotate/"
 # OpenAI API configuration
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def interpret_command(user_input):
+def interpret_command(user_input: str) -> str:
     """Use OpenAI to interpret the user's command and extract the angle."""
     try:
         response = client.chat.completions.create(
